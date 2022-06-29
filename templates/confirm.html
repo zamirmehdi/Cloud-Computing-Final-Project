@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>  
+    <style>
+        a {
+            text-align: center;
+            color: brown;
+        }
+        body{
+         padding-left: 100px;
+         padding-right: 100px;
+        }      
+        input{
+            display: inline-block
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <title>Private - FlaskApp</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="http://localhost:5000/">Home</a>
+                </li>
+              </ul>
+            </div>
+        </div>
+    
+    </nav>
+    <hr>
+    <br>
+
+    <div class="content">
+        <h2>Read and destroy?</h2>
+        <h4>You're about to read and detroy the note with id <strong>{{id}}</strong>.</h4>
+    </div>
+    <hr>
+    <br>
+    <div>
+            <form action = "http://localhost:5000/shownote" method = "POST">
+            <input type="submit" data-mdb-ripple-color="dark" class="btn btn-danger btn-rounded" data-inline="true" name="submit_button" value="Yes, show me the note with id:{{id}}" >
+            
+            <a href="http://localhost:5000/"><button type="button"  data-inline="true" class="btn btn-warning btn-rounded" data-mdb-ripple-color="dark">No, not now </button></a>
+            </form>      
+    </div>
+</body>
+</html>

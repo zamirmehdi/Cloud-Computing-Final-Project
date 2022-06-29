@@ -1,71 +1,55 @@
+from crypt import methods
 from hashlib import sha256
 from urllib.parse import urlparse
 
 import requests as requests
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, request
 import redis
 import os
+import json
 
 app = Flask(__name__)
-rdb = redis.Redis(host=os.getenv('REDIS_HOST'), port=os.getenv('REDIS_PORT'), db=os.getenv('REDIS_DB'),
-                  password=os.getenv('REDIS_SECRET'))
-path_list = {}
 
+rdb = redis.Redis(host='127.0.0.1', port=6379, db=1,
+                  password='', decode_responses=True)
 
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
-    # return render_template("insex.html")
-
-
-@app.route('/api1')
-def api_one():  # put application's code here
-
-    input_note = "Test note"  # For test
-    hashed = sha256(input_note.encode()).hexdigest()
-    path = hashed[:5]
-
-    # For Kuber:
-    # url = int(os.getenv('URL_EX'))
-    # rdb.set(path, input_note, ex=url)
-
-    # res = requests.post('http://localhost:5000/api2', path)
-
-    # For Test:
-    path_list[path] = input_note
-
-    url = urlparse(request.host_url).geturl()
-    print((url))
-
-    return redirect(url_for('api_two', msg=url + path))
-
-
-@app.route('/api2', methods=['POST', 'GET'])
-def api_two():  # put application's code here
-
+@app.route('/', methods = ['POST', 'GET'])
+def get_note():
     if request.method == 'POST':
-        path = request.form['msg']
-        return path
+      input_note = request.form['note']
+      url = 60
+      hashed = sha256(input_note.encode()).hexdigest()
+      path = hashed[:5]
+      rdb.set(path, input_note, ex=url)
+      messages = json.dumps({"path":"http://localhost:5000/"+path})
+      return redirect(url_for('.send_note', messages=messages))
     else:
-        msg = request.args.get('msg')
-        return msg
+        return render_template("homepage.html")
+
+
+@app.route('/sendNote')
+def send_note(): 
+    messages = json.loads(request.args['messages'])
+    path = messages['path']
+    return render_template("showlink.html", url=path)
 
 
 @app.route('/<input_path>')
-def api_three(input_path):  # put application's code here
-    return redirect(url_for('api_four', msg=input_path))
+def search_note(input_path): 
+    return render_template("confirm.html", id=input_path)
 
 
-@app.route('/api4')
-def api_four():  # put application's code here
-    input_path = request.args.get('msg')
-
-    if input_path in path_list.keys():
-        return path_list[input_path]
-    else:
-        return 'Not a valid path. Try again!'
+@app.route('/shownote', methods= ['POST', 'GET'])
+def api_two():
+    if request.method == 'POST':
+        input = request.form['submit_button']
+        print(input)
+        input_path = input.split(':')[1]
+        print(input.split(':'))
+        note = str(rdb.get(input_path))
+        print(note)
+        return render_template("shownote.html", note=note)
 
 
 if __name__ == '__main__':
-    # app.run()
     app.run(host=os.getenv('HOST'), port=os.getenv('PORT'), debug=True)
