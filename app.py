@@ -36,6 +36,8 @@ def send_note():
 
 @app.route('/<input_path>')
 def search_note(input_path): 
+    if rdb.get(input_path) is None:
+        return redirect(url_for('.get_note'))
     return render_template("confirm.html", id=input_path)
 
 
@@ -43,11 +45,9 @@ def search_note(input_path):
 def api_two():
     if request.method == 'POST':
         input = request.form['submit_button']
-        print(input)
         input_path = input.split(':')[1]
-        print(input.split(':'))
         note = str(rdb.get(input_path))
-        print(note)
+        rdb.delete(input_path)
         return render_template("shownote.html", note=note)
 
 
