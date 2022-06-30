@@ -1,18 +1,16 @@
-from crypt import methods
 from hashlib import sha256
-from urllib.parse import urlparse
-
-import requests as requests
+from dotenv import load_dotenv
 from flask import Flask, request, redirect, url_for, render_template, request
 import redis
 import os
 import json
 
+load_dotenv(os.getenv('ENV_FILE', '.env'))
+
 app = Flask(__name__)
 
-rdb = redis.Redis(host='127.0.0.1', port=6379, db=1,
-                  password='', decode_responses=True)
 
+rdb = redis.Redis(host=os.getenv('REDIS_HOST'), port=os.getenv('REDIS_PORT'), db=os.getenv('REDIS_DB'), password=os.getenv('REDIS_SECRET'), decode_responses=True)
 @app.route('/', methods = ['POST', 'GET'])
 def get_note():
     if request.method == 'POST':
