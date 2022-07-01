@@ -2,6 +2,7 @@ version: '3.9'
 services:
   app:
     build: .
+    image: erfanghasemi/ccnote:1.0
     volumes:
       - ./.env.docker:/env/.env
     ports:

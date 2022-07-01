@@ -24,7 +24,6 @@ def get_note():
         input_note = request.form['note']
         hashed = sha256(input_note.encode()).hexdigest()
         path = hashed[:5]
-        url_ex = 60
         url_ex = int(os.getenv('URL_EX'))
         rdb.set(path, input_note, ex=url_ex)
         url = urlparse(request.host_url).geturl()

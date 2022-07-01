@@ -18,7 +18,7 @@ spec:
         app: privatenote
     spec:
       containers:
-      - image: erfanghasemi/ccp:1.3
+      - image: erfanghasemi/ccnote:1.0
         name: privatenote
         resources: 
           requests:
