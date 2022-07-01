@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ .Release.Name }}-privatenote
+  name: {{ .Release.Name }}-privatenote
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-privatenote
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{ .Release.Name }}-privatenote
+    spec:
+      containers:
+      - image: erfanghasemi/ccnote:1.4
+        name: {{ .Release.Name }}-privatenote
+        resources: 
+          requests: 
+            cpu: {{ .Values.resources.requests.cpu }}
+        ports:
+          - containerPort: 8080
+        env:
+          - name: REDIS_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: {{ .Release.Name }}-redis-secret
+        volumeMounts:
+          - mountPath: /env/.env
+            subPath: .env
+            name: config-map
+            readOnly: true
+      volumes:
+        - name: config-map
+          configMap:
+            name: {{ .Release.Name }}-privatenote-config
+status: {}

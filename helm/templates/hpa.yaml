@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: privatenote
+  name: {{ .Release.Name }}-privatenote
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: privatenote
+    name: {{ .Release.Name }}-privatenote
   minReplicas: 1
   maxReplicas: 5
   metrics:
