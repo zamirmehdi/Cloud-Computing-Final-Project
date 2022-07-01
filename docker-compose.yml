@@ -1,19 +1,18 @@
 version: '3.9'
 services:
-  app:
+  privatenote:
     build: .
-    image: erfanghasemi/ccnote:1.0
+    image: erfanghasemi/ccnote:1.4
     volumes:
       - ./.env.docker:/env/.env
     ports:
-#      - 8080:8080
       - 5000:8080
 
-  redis:
+  redis_DB:
     image: redis:6.2.6-alpine
-    command: redis-server --requirepass verysecretpassword
+    command: redis-server --requirepass 123456789
     volumes:
-      - ccp-redis-data:/data
+      - redis-volume:/data
 
 volumes:
-  ccp-redis-data:
+  redis-volume:

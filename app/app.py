@@ -24,8 +24,8 @@ def get_note():
         input_note = request.form['note']
         hashed = sha256(input_note.encode()).hexdigest()
         path = hashed[:5]
-        url_ex = int(os.getenv('URL_EX'))
-        rdb.set(path, input_note, ex=url_ex)
+        url_time = int(os.getenv('URL_TIME'))
+        rdb.set(path, input_note, ex=url_time)
         url = urlparse(request.host_url).geturl()
         messages = json.dumps({"path": url + path})
         return redirect(url_for('.send_note', messages=messages))

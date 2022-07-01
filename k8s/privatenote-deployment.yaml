@@ -18,7 +18,7 @@ spec:
         app: privatenote
     spec:
       containers:
-      - image: erfanghasemi/ccnote:1.0
+      - image: erfanghasemi/ccnote:1.4
         name: privatenote
         resources: 
           requests:
@@ -31,6 +31,7 @@ spec:
               secretKeyRef:
                 key: REDIS_PASSWORD
                 name: redis-secret
+
         volumeMounts:
           - mountPath: /env/.env
             subPath: .env
